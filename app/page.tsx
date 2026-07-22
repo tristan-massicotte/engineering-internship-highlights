@@ -1,4 +1,5 @@
 import ContactButton from "../components/ContactButton";
+import Link from "next/link";
 
 const outcomes = [
   {
@@ -43,16 +44,9 @@ const outcomes = [
   },
 ];
 
-type HomeProps = {
-  searchParams?: Promise<{ skipIntro?: string }>;
-};
-
-export default async function Home({ searchParams }: HomeProps) {
-  const params = searchParams ? await searchParams : {};
-  const skipIntro = params.skipIntro === "1";
-
+export default function Home() {
   return (
-    <main className={`home-shell${skipIntro ? " skip-intro" : ""}`}>
+    <main className="home-shell">
       <div className="intro-screen" aria-hidden="true">
         <span className="intro-kicker">Operations · Systems · Impact</span>
         <h1>Engineering<br />Internship Highlights</h1>
@@ -71,7 +65,7 @@ export default async function Home({ searchParams }: HomeProps) {
 
         <div className="outcome-grid" id="outcomes">
           {outcomes.map((outcome, index) => (
-            <a
+            <Link
               className={`outcome-card ${outcome.size} outcome-${index + 1}`}
               href={`/projects/${outcome.slug}`}
               key={outcome.slug}
@@ -86,7 +80,7 @@ export default async function Home({ searchParams }: HomeProps) {
                 <h2>{outcome.label}</h2>
               </div>
               <span className="outcome-arrow" aria-hidden="true">↗</span>
-            </a>
+            </Link>
           ))}
         </div>
 

@@ -16,7 +16,7 @@ const mrpSteps = [
 function Topbar({ section }: { section: string }) {
   return (
     <nav className="project-nav">
-      <Link href="/?skipIntro=1" className="back-link" aria-label="Back to project grid"><span className="back-arrow">←</span><span className="back-text">All projects</span></Link>
+      <Link href="/#outcomes" className="back-link" aria-label="Back to project grid"><span className="back-arrow">←</span><span className="back-text">All projects</span></Link>
       <span className="nav-section">{section}</span>
       <div className="nav-actions"><ContactButton /></div>
     </nav>
@@ -424,7 +424,7 @@ const exceptionRangeSummary:Record<number,{open:string;exposure:string;critical:
 };
 function ExceptionsQueue({range}:{range:number}){
   const[filter,setFilter]=useState<'all'|'critical'|'watch'>('all');
-  const[selected,setSelected]=useState(exceptionRows[0].id);
+  const[selected,setSelected]=useState<(typeof exceptionRows)[number]['id']>(exceptionRows[0].id);
   const visible=exceptionRows.filter(row=>filter==='all'||row.severity===filter);
   const active=visible.find(row=>row.id===selected)??visible[0];
   const summary=exceptionRangeSummary[range]??exceptionRangeSummary[12];
