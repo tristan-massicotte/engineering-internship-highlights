@@ -98,14 +98,21 @@ function BuyersMockup() {
 
 const visuals = [<ZohoMockup key="a"/>,<ConsolidateMockup key="b"/>,<StockMockup key="c"/>,<BomMockup key="d"/>,<SupplyMockup key="e"/>,<BuyersMockup key="f"/>];
 
+function useMobileReveals(selector: string) {
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => entry.target.classList.toggle('active', entry.isIntersecting)), { rootMargin: '-8% 0px -8%', threshold: 0.25 });
+    document.querySelectorAll(selector).forEach(element => observer.observe(element));
+    return () => observer.disconnect();
+  }, [selector]);
+}
+
 function MrpPage() {
   const [active, setActive] = useState(0);
+  useMobileReveals('[data-mrp-mobile-visual]');
   useEffect(() => {
     const observer = new IntersectionObserver(entries => entries.forEach(entry => { if(entry.isIntersecting) setActive(Number((entry.target as HTMLElement).dataset.step)); }), { rootMargin: '-35% 0px -45%', threshold: 0 });
     document.querySelectorAll('[data-step]').forEach(el => observer.observe(el));
-    const mobileObserver = new IntersectionObserver(entries => entries.forEach(entry => entry.target.classList.toggle('active', entry.isIntersecting)), { rootMargin: '-8% 0px -8%', threshold: 0.25 });
-    document.querySelectorAll('[data-mrp-mobile-visual]').forEach(el => mobileObserver.observe(el));
-    return () => { observer.disconnect(); mobileObserver.disconnect(); };
+    return () => observer.disconnect();
   }, []);
   return <main className="project-page mrp-page">
     <Topbar section="01 / MRP Automation" />
@@ -155,7 +162,7 @@ const inventoryReadouts = [
 
 const inventoryStepToPoint = [2,3,4,4,5,6];
 
-function InventoryChart({ active }: { active: number }) {
+function InventoryChart({ active, idSuffix = 'desktop' }: { active: number; idSuffix?: string }) {
   const activeStep = Math.max(0, Math.min(inventoryStepToPoint.length - 1, active));
   const visible = inventoryStepToPoint[activeStep];
   const readout = inventoryReadouts[activeStep];
@@ -177,10 +184,10 @@ function InventoryChart({ active }: { active: number }) {
   return <div className="inventory-chart-wrap">
     <div className="chart-caption"><span>NORMALIZED INVENTORY VALUE</span><b>${inventoryValues[visible].value.toFixed(2)}M</b></div>
     <svg viewBox="0 0 940 430" role="img" aria-label="Normalized inventory value from March 1 to September 1, scaled between zero and ten million dollars while preserving the original percentage changes">
-      <defs><linearGradient id="areaFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#c8ff2d" stopOpacity=".42"/><stop offset="1" stopColor="#c8ff2d" stopOpacity="0"/></linearGradient><clipPath id="chartReveal"><rect x="0" y="0" width={xForIndex(visible) + 8} height="430" className="chart-reveal"/></clipPath></defs>
+      <defs><linearGradient id={`areaFade-${idSuffix}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#c8ff2d" stopOpacity=".42"/><stop offset="1" stopColor="#c8ff2d" stopOpacity="0"/></linearGradient><clipPath id={`chartReveal-${idSuffix}`}><rect x="0" y="0" width={xForIndex(visible) + 8} height="430" className="chart-reveal"/></clipPath></defs>
       {[0,2,4,6,8,10].map(value=><g key={value}><line x1={chartLeft} x2={chartRight} y1={yForValue(value)} y2={yForValue(value)} stroke="#2f332e"/><text x="58" y={yForValue(value)+4} textAnchor="end" fill="#747a72" fontSize="10">${value}M</text></g>)}
-      <polygon points={area} fill="url(#areaFade)" clipPath="url(#chartReveal)"/>
-      <polyline points={points} fill="none" stroke="#c8ff2d" strokeWidth="6" strokeLinejoin="round" clipPath="url(#chartReveal)"/>
+      <polygon points={area} fill={`url(#areaFade-${idSuffix})`} clipPath={`url(#chartReveal-${idSuffix})`}/>
+      <polyline points={points} fill="none" stroke="#c8ff2d" strokeWidth="6" strokeLinejoin="round" clipPath={`url(#chartReveal-${idSuffix})`}/>
       {inventoryValues.map((entry,i)=>i<=visible?<circle key={entry.label} cx={xForIndex(i)} cy={yForValue(entry.value)} r={i===visible?8:4} fill={i===visible?'#f1f3ee':'#c8ff2d'}/>:null)}
       {inventoryEvents.map((event,index)=>event.threshold<=activeStep?<g className={`inventory-event-marker${event.threshold===Math.min(activeStep,4)?' current':''}`} style={{'--event':index} as React.CSSProperties} key={event.date}><line className="event-guide" x1={xForIndex(event.index)} x2={xForIndex(event.index)} y1={chartTop} y2={chartBottom}/><circle cx={xForIndex(event.index)} cy={yForValue(valueAtIndex(event.index))} r="13"/><text className="event-number" x={xForIndex(event.index)} y={yForValue(valueAtIndex(event.index))+3} textAnchor="middle">{String(index+1).padStart(2,'0')}</text></g>:null)}
       {inventoryValues.map((entry,i)=><text key={entry.label} x={xForIndex(i)} y="400" textAnchor="middle" fill="#8a9088" fontSize="10">{entry.label}</text>)}
@@ -191,8 +198,18 @@ function InventoryChart({ active }: { active: number }) {
   </div>;
 }
 
+const inventorySteps = [
+  { label: 'May 01 · Internship objective', title: 'Turn inventory into cash flow.', body: 'I began the internship with one clear goal: release cash tied up in inventory so the company could reinvest in developing new products for the fall.' },
+  { label: 'Mid May · Just in time', title: 'Order when demand requires it.', body: 'Implemented just in time ordering using the newly built MRP replacing blanket replenishment with order dates calculated from demand and supplier lead time.' },
+  { label: 'Mid June · Dynamic safety stocks', title: 'Set smarter inventory minimums.', body: 'Safety stock levels began adapting to demand forecasts, protecting availability without keeping unnecessary quantities on hand for heavy rollers.' },
+  { label: 'July 01 · Cycle counting', title: 'Improve inventory accuracy.', body: 'Frequent targeted counts identified discrepancies earlier and made the inventory record more reliable for planning decisions allowing for a complete inventory count 4 times a year.' },
+  { label: 'End of July · Obsolete stock', title: 'Remove inventory that no longer creates value.', body: 'Obsolete products were identified and responsibly recycled instead of remaining hidden in carrying cost.' },
+  { label: 'September 01 · Result', title: 'Free cash for what comes next.', body: 'The normalized inventory value moved from $10.0M to $7.9M, a 21% decrease that created more room to invest in new product development.' },
+];
+
 function InventoryPage() {
   const [active,setActive]=useState(0);
+  useMobileReveals('[data-inventory-mobile-visual]');
   useEffect(()=>{const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)setActive(Number((entry.target as HTMLElement).dataset.inventoryStep))}),{rootMargin:'-35% 0px -45%',threshold:0});document.querySelectorAll('[data-inventory-step]').forEach(element=>observer.observe(element));return()=>observer.disconnect()},[]);
   return <main className="project-page inventory-page">
     <Topbar section="02 / Inventory Reduction"/>
@@ -200,13 +217,14 @@ function InventoryPage() {
     <section className="chart-story">
       <div className="chart-sticky"><InventoryChart active={active}/><div className={`end-percentage ${active===5?'complete':''}`}><strong>−21%</strong><span>from the normalized<br/>May peak</span></div></div>
       <div className="chart-scroll-copy">
-        <article data-inventory-step="0"><span>May 01 · Internship objective</span><h2>Turn inventory into cash flow.</h2><p>I began the internship with one clear goal: release cash tied up in inventory so the company could reinvest in developing new products for the fall.</p></article>
-        <article data-inventory-step="1"><span>Mid May · Just in time</span><h2>Order when demand requires it.</h2><p>Implemented just in time ordering using the newly built MRP replacing blanket replenishment with order dates calculated from demand and supplier lead time.</p></article>
-        <article data-inventory-step="2"><span>Mid June · Dynamic safety stocks</span><h2>Set smarter inventory minimums.</h2><p>Safety stock levels began adapting to demand forecasts, protecting availability without keeping unnecessary quantities on hand for heavy rollers.</p></article>
-        <article data-inventory-step="3"><span>July 01 · Cycle counting</span><h2>Improve inventory accuracy.</h2><p>Frequent targeted counts identified discrepancies earlier and made the inventory record more reliable for planning decisions allowing for a complete inventory count 4 times a year.</p></article>
-        <article data-inventory-step="4"><span>End of July · Obsolete stock</span><h2>Remove inventory that no longer creates value.</h2><p>Obsolete products were identified and responsibly recycled instead of remaining hidden in carrying cost.</p></article>
-        <article data-inventory-step="5"><span>September 01 · Result</span><h2>Free cash for what comes next.</h2><p>The normalized inventory value moved from $10.0M to $7.9M, a 21% decrease that created more room to invest in new product development.</p></article>
+        {inventorySteps.map((step,index)=><article data-inventory-step={index} key={step.label}><span>{step.label}</span><h2>{step.title}</h2><p>{step.body}</p></article>)}
       </div>
+    </section>
+    <section className="mobile-sequence inventory-mobile-story" aria-label="Inventory reduction steps">
+      {inventorySteps.map((step,index)=><article className="mobile-sequence-step" key={step.label}>
+        <div className="mobile-sequence-copy inventory-mobile-copy"><span>{step.label}</span><h2>{step.title}</h2><p>{step.body}</p></div>
+        <div className="mobile-sequence-visual inventory-mobile-visual"><div className="mobile-step-layer inventory-mobile-layer" data-inventory-mobile-visual><InventoryChart active={index} idSuffix={`mobile-${index}`}/></div></div>
+      </article>)}
     </section>
     <section className="outcome-band result-outcome"><p>Internship outcome</p><h2>Inventory value<br/><em>reduced.</em></h2><div><strong>21%</strong><span>May to September<br/>inventory reduction</span></div></section>
   </main>;
@@ -308,7 +326,23 @@ function CurveVisual() {
 function PoVisual(){return <div className="po-visual"><div className="po-document"><div className="po-head"><b>PO</b><span>PURCHASE ORDER<br/># PO-260814</span></div><dl><dt>Supplier</dt><dd>Vertex Supply</dd><dt>Item</dt><dd>Precision Housing A7</dd><dt>Quantity</dt><dd>500 units</dd><dt>Unit price</dt><dd>$35.87</dd><dt>Delivery</dt><dd>September 18</dd></dl><div className="po-total">TOTAL <b>$17,935.00</b></div><span className="approved-stamp">AUTO<br/>APPROVED</span></div><div className="send-beam">SENT TO SUPPLIER <span>✓</span></div></div>}
 const quoteVisuals = [DrawingVisual, AggregateVisual, BestPriceVisual, CurveVisual, PoVisual];
 
-function QuotationPage(){const[active,setActive]=useState(0);useEffect(()=>{const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)setActive(Number((e.target as HTMLElement).dataset.quote))}),{rootMargin:'-35% 0px -45%'});document.querySelectorAll('[data-quote]').forEach(el=>o.observe(el));return()=>o.disconnect()},[]);return <main className="project-page quotation-page"><Topbar section="03 / Automatic Quotation"/><header className="quote-hero"><div><p className="eyebrow">Sourcing automation · Case study 03</p><h1>RFQ to PO.<br/><em>Zero handoffs.</em></h1></div><div className="quote-pipeline">{['DRAWINGS','QUOTES','BEST PRICE','PREDICTION','PO'].map((x,i)=><span key={x}>{x}{i<4&&<b>→</b>}</span>)}</div><p>One automated sourcing loop transforms engineering documents into an issued purchase order with every decision traceable.</p></header><section className="quote-story"><div className="quote-visual-sticky"><div className="quote-stage">{quoteVisuals.map((Visual,i)=><div className={`quote-layer ${active===i?'active':''}`} key={Visual.name}><Visual/></div>)}</div></div><div className="quote-copy">{quoteSteps.map((s,i)=><article data-quote={i} className={active===i?'active':''} key={s.label}><small>{s.label}</small><h2>{s.title}</h2><p>{s.body}</p></article>)}</div></section><section className="outcome-band result-outcome"><p>Sourcing outcome</p><h2>RFQ to PO.<br/><em>Fully automated.</em></h2><div><strong>0</strong><span>Manual steps<br/>across the pipeline</span></div></section></main>}
+function QuotationPage(){
+  const[active,setActive]=useState(0);
+  useMobileReveals('[data-quote-mobile-visual]');
+  useEffect(()=>{const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)setActive(Number((e.target as HTMLElement).dataset.quote))}),{rootMargin:'-35% 0px -45%'});document.querySelectorAll('[data-quote]').forEach(el=>o.observe(el));return()=>o.disconnect()},[]);
+  return <main className="project-page quotation-page">
+    <Topbar section="03 / Automatic Quotation"/>
+    <header className="quote-hero"><div><p className="eyebrow">Sourcing automation · Case study 03</p><h1>RFQ to PO.<br/><em>Zero handoffs.</em></h1></div><div className="quote-pipeline">{['DRAWINGS','QUOTES','BEST PRICE','PREDICTION','PO'].map((x,i)=><span key={x}>{x}{i<4&&<b>→</b>}</span>)}</div><p>One automated sourcing loop transforms engineering documents into an issued purchase order with every decision traceable.</p></header>
+    <section className="quote-story"><div className="quote-visual-sticky"><div className="quote-stage">{quoteVisuals.map((Visual,i)=><div className={`quote-layer ${active===i?'active':''}`} key={Visual.name}><Visual/></div>)}</div></div><div className="quote-copy">{quoteSteps.map((s,i)=><article data-quote={i} className={active===i?'active':''} key={s.label}><small>{s.label}</small><h2>{s.title}</h2><p>{s.body}</p></article>)}</div></section>
+    <section className="mobile-sequence quote-mobile-story" aria-label="Automatic quotation steps">
+      {quoteSteps.map((step,index)=>{const Visual=quoteVisuals[index];return <article className="mobile-sequence-step" key={step.label}>
+        <div className="mobile-sequence-copy quote-mobile-copy"><small>{step.label}</small><h2>{step.title}</h2><p>{step.body}</p></div>
+        <div className="mobile-sequence-visual quote-mobile-visual"><div className="quote-layer mobile-step-layer quote-mobile-layer" data-quote-mobile-visual><Visual/></div></div>
+      </article>})}
+    </section>
+    <section className="outcome-band result-outcome"><p>Sourcing outcome</p><h2>RFQ to PO.<br/><em>Fully automated.</em></h2><div><strong>0</strong><span>Manual steps<br/>across the pipeline</span></div></section>
+  </main>
+}
 
 type SupplierMetric={name:string;nonConformity:number;onTime:number;averageDelay:number;score:number};
 const supplierMetrics:Record<number,SupplierMetric[]>={
@@ -479,14 +513,30 @@ const followSteps=[
   {label:'CHECK',title:'Watch two critical windows.',body:'The system evaluates both one-month and two-week checkpoints, escalating attention as delivery approaches.'},
   {label:'SEND',title:'Follow up automatically.',body:'A concise, pre-addressed confirmation email is generated and sent directly to the supplier contact.'}
 ];
-function FollowVisual({active}:{active:number}){return <div className="follow-system">
+function FollowVisual({active,showPath=true}:{active:number;showPath?:boolean}){return <div className="follow-system">
   <div className={`api-console ${active===0?'active':''}`}><div><span>GET</span> /api/v2/purchase-orders?status=open</div><pre>{`{\n  "po_number": "PO-260814",\n  "supplier": "Summit Industrial",\n  "status": "OPEN",\n  "confirmed_delivery": "2026-09-18"\n}`}</pre><small>200 OK · 24 RECORDS</small></div>
   <div className={`date-parser ${active===1?'active':''}`}><span>CONFIRMED_DELIVERY</span><b>SEP <strong>18</strong> 2026</b><div><i/> Parsed from PO-260814</div></div>
   <div className={`trigger-timeline ${active===2?'active':''}`}><div className="timeline-line"><i/><i/><i/></div><div className="timeline-labels"><span><b>AUG 18</b>1 MONTH OUT<em>FLAG</em></span><span><b>SEP 04</b>2 WEEKS OUT<em>FLAG</em></span><span><b>SEP 18</b>DELIVERY</span></div></div>
   <div className={`email-draft ${active===3?'active':''}`}><header><span>NEW MESSAGE</span><b>×</b></header><dl><dt>To</dt><dd>orders@summit.example</dd><dt>Subject</dt><dd>Delivery confirmation · PO-260814</dd></dl><p>Hello,<br/><br/>Please confirm that PO-260814 remains on schedule for September 18.<br/><br/>Thank you,<br/>Purchasing Operations</p><button>Sent <span>✓</span></button></div>
-  <div className="system-path">{followSteps.map((s,i)=><span className={active>=i?'passed':''} key={s.label}>{i+1}</span>)}</div>
+  {showPath&&<div className="system-path">{followSteps.map((s,i)=><span className={active>=i?'passed':''} key={s.label}>{i+1}</span>)}</div>}
   </div>}
-function FollowPage(){const[active,setActive]=useState(0);useEffect(()=>{const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)setActive(Number((e.target as HTMLElement).dataset.follow))}),{rootMargin:'-38% 0px -42%'});document.querySelectorAll('[data-follow]').forEach(el=>o.observe(el));return()=>o.disconnect()},[]);return <main className="project-page follow-page"><Topbar section="04 / Order Follow-Up"/><header className="follow-hero"><p className="eyebrow">Supplier operations · Case study 04</p><div><h1>Know before<br/>it&apos;s <em>late.</em></h1><p>Proactive delay detection at one month and two weeks before every confirmed delivery date.</p></div><div className="follow-flags"><span><b>30</b>days out</span><span><b>14</b>days out</span></div></header><section className="follow-story"><div className="follow-sticky"><FollowVisual active={active}/></div><div className="follow-copy">{followSteps.map((s,i)=><article data-follow={i} className={active===i?'active':''} key={s.label}><span>{s.label}</span><h2>{s.title}</h2><p>{s.body}</p><small>0{i+1} / 04</small></article>)}</div></section><section className="follow-end"><p>Result</p><h2>Fewer surprises.<br/><em>Faster responses.</em></h2></section></main>}
+function FollowPage(){
+  const[active,setActive]=useState(0);
+  useMobileReveals('[data-follow-mobile-visual]');
+  useEffect(()=>{const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)setActive(Number((e.target as HTMLElement).dataset.follow))}),{rootMargin:'-38% 0px -42%'});document.querySelectorAll('[data-follow]').forEach(el=>o.observe(el));return()=>o.disconnect()},[]);
+  return <main className="project-page follow-page">
+    <Topbar section="04 / Order Follow-Up"/>
+    <header className="follow-hero"><p className="eyebrow">Supplier operations · Case study 04</p><div><h1>Know before<br/>it&apos;s <em>late.</em></h1><p>Proactive delay detection at one month and two weeks before every confirmed delivery date.</p></div><div className="follow-flags"><span><b>30</b>days out</span><span><b>14</b>days out</span></div></header>
+    <section className="follow-story"><div className="follow-sticky"><FollowVisual active={active}/></div><div className="follow-copy">{followSteps.map((s,i)=><article data-follow={i} className={active===i?'active':''} key={s.label}><span>{s.label}</span><h2>{s.title}</h2><p>{s.body}</p><small>0{i+1} / 04</small></article>)}</div></section>
+    <section className="mobile-sequence follow-mobile-story" aria-label="Order follow-up steps">
+      {followSteps.map((step,index)=><article className="mobile-sequence-step" key={step.label}>
+        <div className="mobile-sequence-copy follow-mobile-copy"><span>{step.label}</span><h2>{step.title}</h2><p>{step.body}</p></div>
+        <div className="mobile-sequence-visual follow-mobile-visual"><div className="mobile-step-layer follow-mobile-layer" data-follow-mobile-visual><FollowVisual active={index} showPath={false}/></div></div>
+      </article>)}
+    </section>
+    <section className="follow-end"><p>Result</p><h2>Fewer surprises.<br/><em>Faster responses.</em></h2></section>
+  </main>
+}
 
 function Placeholder({ slug }: { slug: string }) {
   const title = slug.split('-').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ');
