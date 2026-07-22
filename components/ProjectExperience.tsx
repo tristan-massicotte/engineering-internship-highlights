@@ -103,7 +103,9 @@ function MrpPage() {
   useEffect(() => {
     const observer = new IntersectionObserver(entries => entries.forEach(entry => { if(entry.isIntersecting) setActive(Number((entry.target as HTMLElement).dataset.step)); }), { rootMargin: '-35% 0px -45%', threshold: 0 });
     document.querySelectorAll('[data-step]').forEach(el => observer.observe(el));
-    return () => observer.disconnect();
+    const mobileObserver = new IntersectionObserver(entries => entries.forEach(entry => entry.target.classList.toggle('active', entry.isIntersecting)), { rootMargin: '-8% 0px -8%', threshold: 0.25 });
+    document.querySelectorAll('[data-mrp-mobile-visual]').forEach(el => mobileObserver.observe(el));
+    return () => { observer.disconnect(); mobileObserver.disconnect(); };
   }, []);
   return <main className="project-page mrp-page">
     <Topbar section="01 / MRP Automation" />
@@ -117,6 +119,12 @@ function MrpPage() {
     <section className="sticky-story">
       <div className="story-visual"><div className="visual-stage">{visuals.map((visual,i)=><div className={`visual-layer ${active===i?'active':''}`} key={i}>{visual}</div>)}</div><div className="step-progress">{mrpSteps.map((s,i)=><span className={active===i?'active':''} key={s.key}>{s.key}</span>)}</div></div>
       <div className="story-copy">{mrpSteps.map((step,i)=><article data-step={i} className={active===i?'active':''} key={step.key}><div className="step-tag"><span>{step.key}</span>{step.label}</div><h2>{step.title}</h2><p>{step.description}</p></article>)}</div>
+    </section>
+    <section className="mrp-mobile-story" aria-label="MRP workflow steps">
+      {mrpSteps.map((step,i)=><article className="mrp-mobile-step" key={step.key}>
+        <div className="mrp-mobile-copy"><div className="step-tag"><span>{step.key}</span>{step.label}</div><h2>{step.title}</h2><p>{step.description}</p></div>
+        <div className="mrp-mobile-visual"><div className="visual-layer mrp-mobile-layer" data-mrp-mobile-visual>{visuals[i]}</div></div>
+      </article>)}
     </section>
     <section className="outcome-band"><p>System outcome</p><h2>Demand in.<br /><em>Decisions out.</em></h2><div><span>5 days</span><i>→</i><strong>0.5 days</strong></div></section>
   </main>;
