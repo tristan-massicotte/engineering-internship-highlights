@@ -162,6 +162,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   .outcome-copy h2,.minor .outcome-copy h2{max-width:78%;margin:0;padding:0 30px 0 0;font-size:clamp(1rem,4.6vw,1.25rem);line-height:.95;transform:none}
   .outcome-3 .outcome-copy h2,.outcome-5 .outcome-copy h2{padding-right:30px;transform:none}
   .outcome-arrow{right:16px;bottom:16px;font-size:22px}
+  .outcome-arrow,.contact-trigger>span,.contact-list a>i,.back-arrow,.outcome-band>div>i,.mail-flight,.quote-pipeline b,.exception-inspector button i,.dashboard-refresh>span{display:none}
   .executive-footer{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-top:24px;padding-top:16px;font-size:7px;line-height:1.35}
   .contact-trigger{min-height:44px;padding:0 11px;font-size:8px}
   .contact-backdrop{padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
@@ -271,7 +272,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   .quote-hero>p{margin:46px 0 0;font-size:15px}
   .quote-visual-sticky{height:52svh;min-height:360px;max-height:470px;padding:20px 10px 24px}
   .quote-stage{height:43svh;min-height:300px;max-height:410px}
-  .drawing-visual{grid-template-columns:minmax(0,1fr) 76px 34px;gap:8px}
+  .drawing-visual{grid-template-columns:minmax(0,1fr) 76px;gap:8px}
   .file-cloud span{padding:7px 5px;font-size:6px}
   .zip-box{height:96px;padding:9px}
   .zip-box b{font-size:12px}
