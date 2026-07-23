@@ -14,9 +14,18 @@ const mrpSteps = [
 ];
 
 function Topbar({ section }: { section: string }) {
+  const returnToPortfolio = () => {
+    document.documentElement.classList.add("skip-portfolio-intro");
+    try {
+      window.sessionStorage.setItem("engineering-portfolio-intro-seen", "1");
+    } catch {
+      // The class above still prevents the intro from replaying.
+    }
+  };
+
   return (
     <nav className="project-nav">
-      <Link href="/#outcomes" className="back-link" aria-label="Back to project grid"><span className="back-arrow">←</span><span className="back-text">All projects</span></Link>
+      <Link href="/#outcomes" onClick={returnToPortfolio} className="back-link" aria-label="Back to project grid"><span className="back-arrow">←</span><span className="back-text">All projects</span></Link>
       <span className="nav-section">{section}</span>
       <div className="nav-actions"><ContactButton /></div>
     </nav>

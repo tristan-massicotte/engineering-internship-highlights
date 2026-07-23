@@ -12,7 +12,7 @@ button{font:inherit}
 
 /* Landing */
 .home-shell{min-height:100vh;background:var(--ink)}
-.home-shell:has(#outcomes:target) .intro-screen{display:none}.home-shell:has(#outcomes:target) .executive-index{opacity:1;transform:none;animation:none}
+.home-shell:has(#outcomes:target) .intro-screen,html.skip-portfolio-intro .intro-screen{display:none}.home-shell:has(#outcomes:target) .executive-index,html.skip-portfolio-intro .executive-index{opacity:1;transform:none;animation:none}
 .intro-screen{position:fixed;inset:0;z-index:20;display:grid;place-content:center;padding:5vw;background:var(--acid);color:var(--ink);animation:intro-away .75s cubic-bezier(.7,0,.25,1) 2s forwards;pointer-events:none}
 .intro-screen h1{font-family:var(--display);font-size:clamp(3.8rem,9.5vw,10rem);line-height:.83;letter-spacing:-.075em;text-transform:uppercase;margin:.2em 0;text-align:center}
 .intro-kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;text-align:center;font-weight:900}

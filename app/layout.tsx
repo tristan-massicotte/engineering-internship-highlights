@@ -10,6 +10,26 @@ const faviconPath =
     ? `/${repositoryName}/favicon.svg`
     : "/favicon.svg";
 
+const introStateScript = `
+(function () {
+  var key = "engineering-portfolio-intro-seen";
+  try {
+    var shouldSkip =
+      window.sessionStorage.getItem(key) === "1" ||
+      window.location.hash === "#outcomes";
+    if (shouldSkip) {
+      document.documentElement.classList.add("skip-portfolio-intro");
+    } else {
+      window.sessionStorage.setItem(key, "1");
+    }
+  } catch (_) {
+    if (window.location.hash === "#outcomes") {
+      document.documentElement.classList.add("skip-portfolio-intro");
+    }
+  }
+})();
+`;
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -46,6 +66,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: introStateScript }} />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
