@@ -448,3 +448,56 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   .executive-kpi-strip{grid-template-columns:1fr}
   .donut-legend{grid-template-columns:1fr}
 }
+
+/* Final responsive refinements */
+.complex-forecast .forecast-chart path.forecast-safety{stroke:#ff9ec4}
+.forecast-legend .safety{background:#ff9ec4}
+
+@media(max-width:600px){
+  /* MRP */
+  .mrp-mobile-step:nth-child(5) .mrp-mobile-visual{height:62svh;min-height:500px;max-height:560px;padding-bottom:50px}
+  .mrp-mobile-step:nth-child(5) .mrp-mobile-layer{inset:24px 14px 50px}
+  .mrp-page .outcome-band>div{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+  .mrp-page .outcome-band>div span{font-size:clamp(2rem,10vw,2.8rem);line-height:1}
+  .mrp-page .outcome-band>div strong{font-size:clamp(5rem,25vw,7rem);line-height:.78}
+
+  /* Inventory */
+  .inventory-event-readout{left:auto;right:8%;width:max-content;max-width:84%;padding:10px 14px}
+
+  /* Order follow-up */
+  .follow-mobile-story .mobile-sequence-step:nth-child(1) .api-console{inset:0;padding:14px}
+  .follow-mobile-story .mobile-sequence-step:nth-child(1) .api-console>div{font-size:8px}
+  .follow-mobile-story .mobile-sequence-step:nth-child(1) .api-console pre{margin:18px 0 0;font-size:clamp(10px,2.85vw,12px);line-height:1.75}
+  .follow-mobile-story .mobile-sequence-step:nth-child(1) .api-console small{font-size:7px}
+  .follow-mobile-story .mobile-sequence-step:nth-child(2) .date-parser>span{text-align:center}
+  .follow-mobile-story .mobile-sequence-step:nth-child(2) .date-parser>b{width:100%;justify-content:center;text-align:center}
+  .follow-mobile-story .mobile-sequence-step:nth-child(3) .follow-mobile-visual{height:54svh;min-height:400px;max-height:500px}
+  .follow-mobile-story .mobile-sequence-step:nth-child(3) .follow-mobile-layer{inset:4px}
+  .follow-mobile-story .mobile-sequence-step:nth-child(3) .trigger-timeline{inset:2% 0}
+  .follow-mobile-story .mobile-sequence-step:nth-child(3) .timeline-labels{gap:10px;margin-top:32px}
+  .follow-mobile-story .mobile-sequence-step:nth-child(3) .timeline-labels span{font-size:7px}
+  .follow-mobile-story .mobile-sequence-step:nth-child(3) .timeline-labels b{font-size:17px}
+  .follow-mobile-story .mobile-sequence-step:nth-child(3) .timeline-labels em{font-size:7px;padding:5px}
+
+  /* KPI dashboard */
+  .ranking-controls>span{font-size:8px}
+  .ranking-controls button{font-size:10px}
+  .ranking-row:not(.ranking-head){grid-template-columns:42px 1fr 1fr;gap:11px 12px;padding:18px 12px;font-size:12px;line-height:1.3}
+  .ranking-row:not(.ranking-head)>strong{font-size:23px}
+  .ranking-row:not(.ranking-head)>b{font-size:14px}
+  .ranking-row:not(.ranking-head) .score-cell{font-size:11px}
+  .ranking-row:not(.ranking-head)>span[data-label]:before{font-size:8px;line-height:1.2}
+
+  .depth-donut{gap:24px}
+  .depth-donut-chart{width:100%;min-height:270px;overflow:hidden}
+  .depth-donut-chart svg{width:min(100%,250px);max-width:250px;overflow:hidden}
+  .donut-period{bottom:8px}
+  .donut-legend{position:relative;z-index:2;grid-template-columns:1fr 1fr;gap:7px;padding-top:2px;background:var(--ink)}
+
+  .mobile-chart-hint{display:none}
+  .mobile-chart-scroll{overflow:visible}
+  .product-lines .mobile-chart-scroll svg{width:100%;min-width:0}
+  .complex-forecast .mobile-chart-scroll .forecast-chart{width:100%;min-width:0;touch-action:none}
+  .product-lines svg text{font-size:10px}
+  .product-lines svg .axis-title,.product-months text,.forecast-months text{font-size:9px}
+}
