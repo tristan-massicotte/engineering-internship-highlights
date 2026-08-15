@@ -1,8 +1,11 @@
 import ProjectExperience from "../../../components/ProjectExperience";
 
+// "inventory-reduction" is intentionally omitted so its page is no longer
+// built or reachable on the live site. The page code is preserved in
+// components/ProjectExperience.tsx (InventoryPage). Re-add the slug here to
+// restore it.
 const projectSlugs = [
   "mrp-automation",
-  "inventory-reduction",
   "automatic-quotation",
   "order-follow-up",
   "executive-kpi-dashboard",

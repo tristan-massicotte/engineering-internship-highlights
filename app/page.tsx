@@ -1,6 +1,11 @@
 import ContactButton from "../components/ContactButton";
 import Link from "next/link";
 
+// NOTE: The "inventory-reduction" project is intentionally kept out of this
+// list so its card and link no longer appear on the site. The full page code
+// still lives in components/ProjectExperience.tsx (InventoryPage) as a backup.
+// To bring it back: re-add an entry here and re-add "inventory-reduction" to
+// projectSlugs in app/projects/[slug]/page.tsx.
 const outcomes = [
   {
     number: "01",
@@ -12,35 +17,27 @@ const outcomes = [
   },
   {
     number: "02",
-    slug: "inventory-reduction",
-    value: "21%",
-    label: "Inventory reduction",
-    project: "Inventory Reduction",
-    size: "major",
-  },
-  {
-    number: "03",
     slug: "automatic-quotation",
     value: "0",
     label: "Manual RFQ steps",
     project: "Automatic Quotation",
-    size: "minor",
+    size: "major",
   },
   {
-    number: "04",
+    number: "03",
     slug: "order-follow-up",
     value: "30 / 14",
     label: "Day early-warning flags",
     project: "Order Follow-Up",
-    size: "minor",
+    size: "major",
   },
   {
-    number: "05",
+    number: "04",
     slug: "executive-kpi-dashboard",
     value: "LIVE",
     label: "KPI visibility",
     project: "Executive Dashboard",
-    size: "minor",
+    size: "major",
   },
 ];
 

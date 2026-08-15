@@ -340,8 +340,8 @@ function QuotationPage(){
   useMobileReveals('[data-quote-mobile-visual]');
   useEffect(()=>{const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)setActive(Number((e.target as HTMLElement).dataset.quote))}),{rootMargin:'-35% 0px -45%'});document.querySelectorAll('[data-quote]').forEach(el=>o.observe(el));return()=>o.disconnect()},[]);
   return <main className="project-page quotation-page">
-    <Topbar section="03 / Automatic Quotation"/>
-    <header className="quote-hero"><div><p className="eyebrow">Sourcing automation · Case study 03</p><h1>RFQ to PO.<br/><em>Zero handoffs.</em></h1></div><div className="quote-pipeline">{['DRAWINGS','QUOTES','BEST PRICE','PREDICTION','PO'].map((x,i)=><span key={x}>{x}{i<4&&<b>→</b>}</span>)}</div><p>One automated sourcing loop transforms engineering documents into an issued purchase order with every decision traceable.</p></header>
+    <Topbar section="02 / Automatic Quotation"/>
+    <header className="quote-hero"><div><p className="eyebrow">Sourcing automation · Case study 02</p><h1>RFQ to PO.<br/><em>Zero handoffs.</em></h1></div><div className="quote-pipeline">{['DRAWINGS','QUOTES','BEST PRICE','PREDICTION','PO'].map((x,i)=><span key={x}>{x}{i<4&&<b>→</b>}</span>)}</div><p>One automated sourcing loop transforms engineering documents into an issued purchase order with every decision traceable.</p></header>
     <section className="quote-story"><div className="quote-visual-sticky"><div className="quote-stage">{quoteVisuals.map((Visual,i)=><div className={`quote-layer ${active===i?'active':''}`} key={Visual.name}><Visual/></div>)}</div></div><div className="quote-copy">{quoteSteps.map((s,i)=><article data-quote={i} className={active===i?'active':''} key={s.label}><small>{s.label}</small><h2>{s.title}</h2><p>{s.body}</p></article>)}</div></section>
     <section className="mobile-sequence quote-mobile-story" aria-label="Automatic quotation steps">
       {quoteSteps.map((step,index)=>{const Visual=quoteVisuals[index];return <article className="mobile-sequence-step" key={step.label}>
@@ -505,7 +505,7 @@ function DashboardPage(){
     {label:'Top manufacturer',value:'Orion',delta:`${currentMix[0]}% of ${range}M volume`,tone:'good',points:manufacturerShareHistory.slice(start)},
   ];
   const refresh=()=>{setRefreshing(true);setRefreshedAt(new Date().toLocaleTimeString('en-CA',{hour:'2-digit',minute:'2-digit',hour12:false}));window.setTimeout(()=>setRefreshing(false),650);};
-  return <main className="project-page dashboard-page"><Topbar section="05 / Executive KPI Dashboard"/><header className="dashboard-head"><div><p className="eyebrow">Decision intelligence · Case study 05</p><h1>Operations<br/><em>control room.</em></h1></div><div className="live-status"><i/> 6 SOURCES ONLINE · UPDATED {refreshedAt}</div></header>
+  return <main className="project-page dashboard-page"><Topbar section="04 / Executive KPI Dashboard"/><header className="dashboard-head"><div><p className="eyebrow">Decision intelligence · Case study 04</p><h1>Operations<br/><em>control room.</em></h1></div><div className="live-status"><i/> 6 SOURCES ONLINE · UPDATED {refreshedAt}</div></header>
   <section className="dashboard-commandbar simplified"><div className="command-horizon"><span>Analysis horizon</span>{[6,9,12].map(months=><button className={range===months?'active':''} onClick={()=>setRange(months)} key={months}>{months} MONTHS</button>)}</div><button className={`dashboard-refresh ${refreshing?'refreshing':''}`} onClick={refresh}><span>↻</span>Refresh data</button></section>
   <section className="executive-kpi-strip" aria-label="Executive KPI summary">{kpis.map(kpi=><article key={kpi.label}><div><span>{kpi.label}</span><strong>{kpi.value}</strong><small className={kpi.tone}>{kpi.delta}</small></div><KpiSparkline points={kpi.points} tone={kpi.tone}/></article>)}</section>
   <section className="dashboard-grid">
@@ -534,8 +534,8 @@ function FollowPage(){
   useMobileReveals('[data-follow-mobile-visual]');
   useEffect(()=>{const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)setActive(Number((e.target as HTMLElement).dataset.follow))}),{rootMargin:'-38% 0px -42%'});document.querySelectorAll('[data-follow]').forEach(el=>o.observe(el));return()=>o.disconnect()},[]);
   return <main className="project-page follow-page">
-    <Topbar section="04 / Order Follow-Up"/>
-    <header className="follow-hero"><p className="eyebrow">Supplier operations · Case study 04</p><div><h1>Know before<br/>it&apos;s <em>late.</em></h1><p>Proactive delay detection at one month and two weeks before every confirmed delivery date.</p></div><div className="follow-flags"><span><b>30</b>days out</span><span><b>14</b>days out</span></div></header>
+    <Topbar section="03 / Order Follow-Up"/>
+    <header className="follow-hero"><p className="eyebrow">Supplier operations · Case study 03</p><div><h1>Know before<br/>it&apos;s <em>late.</em></h1><p>Proactive delay detection at one month and two weeks before every confirmed delivery date.</p></div><div className="follow-flags"><span><b>30</b>days out</span><span><b>14</b>days out</span></div></header>
     <section className="follow-story"><div className="follow-sticky"><FollowVisual active={active}/></div><div className="follow-copy">{followSteps.map((s,i)=><article data-follow={i} className={active===i?'active':''} key={s.label}><span>{s.label}</span><h2>{s.title}</h2><p>{s.body}</p><small>0{i+1} / 04</small></article>)}</div></section>
     <section className="mobile-sequence follow-mobile-story" aria-label="Order follow-up steps">
       {followSteps.map((step,index)=><article className="mobile-sequence-step" key={step.label}>
