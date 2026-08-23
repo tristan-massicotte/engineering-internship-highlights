@@ -68,6 +68,12 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <script dangerouslySetInnerHTML={{ __html: introStateScript }} />
+        {/* Cloudflare Web Analytics — privacy-friendly visitor counting */}
+        <script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "195ef2c7dec2488184104a8d6306b966"}'
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
