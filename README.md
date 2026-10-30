@@ -1,10 +1,6 @@
 # Engineering Internship Highlights
 
-A bold, interactive portfolio presenting operational engineering internship projects through animated case studies and executive dashboards.
 
-## Live site
-
-[engineering-internship-highlights.medialexie.chatgpt.site](https://engineering-internship-highlights.medialexie.chatgpt.site)
 
 ## Featured projects
 
